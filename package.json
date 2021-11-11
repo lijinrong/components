@@ -5,8 +5,10 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
+    "build:lib": "vue-cli-service build --lib",
     "test:unit": "vue-cli-service test:unit"
   },
+	"main": "./lib//ik-comp.js",
   "dependencies": {
     "core-js": "^3.6.5",
     "vue": "^2.6.11"
@@ -17,8 +19,15 @@
     "@vue/cli-service": "~4.5.0",
     "@vue/test-utils": "^1.0.3",
     "chai": "^4.1.2",
+    "eslint-config-ik-gz": "git+ssh://git@code.inke.cn:gz/web/opd/eslint-config-ik-gz.git",
+    "less": "^4.1.2",
+    "less-loader": "^7.2.0",
+    "postcss-px2rem": "^0.3.0",
     "sass": "^1.26.5",
     "sass-loader": "^8.0.2",
-    "vue-template-compiler": "^2.6.11"
+    "stylelint": "^14.0.1",
+    "stylelint-order": "^5.0.0",
+    "vue-template-compiler": "^2.6.11",
+    "webpack-bundle-analyzer": "^4.5.0"
   }
 }

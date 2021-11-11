@@ -1,0 +1,101 @@
+.dialog {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 999;
+  width: 100vw;
+  height: 100vh;
+
+  .mask {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+  }
+  .scroll-area {
+    flex-shrink: 1;
+    z-index: 0;
+    overflow: auto;
+  }
+
+  .middle-enter,
+  .middle-leave-to {
+    transform: scale(0);
+  }
+  .middle-enter-to,
+  .middle-leave {
+    transform: scale(1);
+  }
+  .middle-enter-active,
+  .middle-leave-active {
+    transition: all 0.3s;
+  }
+
+  .top-enter,
+  .top-leave-to {
+    transform: translateY(-100vh);
+  }
+  .top-enter-to,
+  .top-leave {
+    transform: translateY(0);
+  }
+  .top-enter-active,
+  .top-leave-active {
+    transition: all 0.5s;
+  }
+
+  .right-enter,
+  .right-leave-to {
+    transform: translateX(100vw);
+  }
+  .right-enter-to,
+  .right-leave {
+    transform: translateX(0);
+  }
+  .right-enter-active,
+  .right-leave-active {
+    transition: all 0.5s;
+  }
+
+  .bottom-enter,
+  .bottom-leave-to {
+    transform: translateY(100vh);
+  }
+  .bottom-enter-to,
+  .bottom-leave {
+    transform: translateY(0);
+  }
+  .bottom-enter-active,
+  .bottom-leave-active {
+    transition: all 0.5s;
+  }
+
+  .left-enter,
+  .left-leave-to {
+    transform: translateX(-100vw);
+  }
+  .left-enter-to,
+  .left-leave {
+    transform: translateX(0);
+  }
+  .left-enter-active,
+  .left-leave-active {
+    transition: all 0.5s;
+  }
+
+  // 蒙层的动画效果
+  .fade-enter-active,
+  .fade-leave-active {
+    transition: opacity 0.2s;
+  }
+  .fade-enter,
+  .fade-leave-to {
+    opacity: 0;
+  }
+}
