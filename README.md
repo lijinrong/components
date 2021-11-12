@@ -53,6 +53,60 @@ Avatar.install = function(Vue) {
 };
 
 export default Avatar;
+```
 
+5. 在`packages/index.js`组件列表中加入组件引用并导出
+
+ps：若希望组件不能通过`Vue.use`安装，入口文件为`index.vue`即可，可忽略index.js文件，打包工具会自动选择各个组件入口，优先级为`index.js`>`index.vue`，即组件目录有`index.js`，则入口为`index.js`，若无则入口文件为`index.vue`
+
+#### 打包
+
+`npm run build:lib`
+
+#### 本地开发
+
+`npm run serve`
+
+## 单元测试
+
+后续加入
+
+## VuePress搭建文档
+
+后续加入
+
+官网地址：https://link.juejin.cn/?target=https%3A%2F%2Fwww.vuepress.cn%2Fguide%2Fgetting-started.html
+
+## 使用
+
+npm安装babel-plugin-component
+
+然后通过npm安装此组件库后，修改.babelrc
+
+```js
+{
+  ...
+  plugins: [
+    ...
+    [
+      'component', 
+      [
+        ...
+        {
+          "libraryName": "ik-components",
+					"style": true,
+        },
+        ...
+      ]
+    ]
+  ]
+  ...
+}
+```
+
+在代码中引用即可
+
+```js
+import {avatar} from 'ik-components'
 ```
 
