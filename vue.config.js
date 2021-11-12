@@ -28,7 +28,10 @@ function resolveLibConfig(config) {
   const arr = fs.readdirSync(dir);
   arr.forEach(item => {
     const fullPath = path.join(dir, item);
-    const entryPath = path.join(fullPath, 'index.js');
+    let entryPath = path.join(fullPath, 'index.js');
+    if(!fs.existsSync(entryPath)) {
+      entryPath = path.join(fullPath, 'index.vue');
+    }
 
     const stats = fs.statSync(fullPath);
     if (stats.isDirectory()) {
