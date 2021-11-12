@@ -15,5 +15,5 @@ if (typeof Window.Vue !== 'undefined') {
 
 export default {
   install,
-  dialogAPI: Dialog,
+  dialogApi: Dialog,
 };
