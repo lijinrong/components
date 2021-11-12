@@ -1,4 +1,4 @@
-import Dialog from './dialog/index.js';
+import Dialog from './dialog-api/index.js';
 // ... 其他组件
 
 // 全局注册组件

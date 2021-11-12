@@ -1,0 +1,12 @@
+package-lock.json
+node_modules
+src
+public
+tests
+.browserslistrc
+.eslintrc.js
+.postcssrc.js
+babel.config.js
+stylelint.config.js
+vue.config.js
+.npmignore

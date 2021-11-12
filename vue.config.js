@@ -1,6 +1,10 @@
 const path = require('path');
 const fs = require('fs');
 
+function toLine(name) {
+  return name.replace(/([A-Z])/g, '-$1').toLowerCase();
+}
+
 // 开发配置
 function resolveConfig(config) {
   config.plugin('html').tap(() => [
@@ -30,7 +34,7 @@ function resolveLibConfig(config) {
     if (stats.isDirectory()) {
       const entryStats = fs.statSync(entryPath);
       if (!entryStats.isDirectory()) {
-        config.entry(item).add(entryPath).end();
+        config.entry(toLine(item)).add(entryPath).end();
       }
     }
   });
@@ -38,14 +42,14 @@ function resolveLibConfig(config) {
   config.entry('ik-comp').add(entryWithAll).end();
 
   // 打包lib
-  config.output.library('ik-comp').libraryTarget('umd').filename('[name].js');
+  config.output.library('ik-comp').libraryTarget('umd').filename('[name]/index.js');
   //不拆分公共代码
   config.optimization.splitChunks(false);
   // 单独提取css配置
   config.plugin('extract-css').tap(() => [
     {
-      filename: 'style/[name].css',
-      chunkFilename: 'style/[name].css',
+      filename: '[name]/style.css',
+      chunkFilename: '[name]/style.css',
     },
   ]);
   // 不需拷贝html文件

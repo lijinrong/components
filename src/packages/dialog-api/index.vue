@@ -1,11 +1,12 @@
 <template>
   <div class="dialog" :style="positionStyle">
     <transition name="fade">
-      <div class="mask" v-if="!nomask && show" @click="onMask" ref="mask"></div>
+      <div class="mask" v-if="!nomask && show" @click.self="onMaskClose"></div>
     </transition>
     <transition :name="animateName" @after-leave="afterLeave">
       <div class="scroll-area" v-if="show" ref="content"></div>
     </transition>
+    <div v-if="animateName === 'bottom'" class="safe-distance"></div>
   </div>
 </template>
 
@@ -29,7 +30,7 @@ export default {
       type: Boolean,
       default: false,
     },
-    noClose: {
+    disableMaskClose: {
       type: Boolean,
       default: false,
     },
@@ -64,9 +65,8 @@ export default {
     this.show = true;
   },
   methods: {
-    onMask(e) {
-      if (this.noClose && e.target && e.target === this.$refs.mask) {
-        console.log('点击蒙层');
+    onMaskClose() {
+      if (this.canMaskClose) {
         return;
       }
       this.onClose();

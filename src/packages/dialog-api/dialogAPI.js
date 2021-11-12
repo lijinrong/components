@@ -28,10 +28,10 @@ export default class DialogApi {
   ) {
     const options = lifecycle
       ? Object.assign(
-        ContentWrapper,
+          ContentWrapper,
           { mixins: [lifecycle] },
           { router, store }
-      )
+        )
       : Object.assign(ContentWrapper, { router, store });
     const Constructor = Vue.extend(options);
     const Instance = new Constructor({
@@ -77,21 +77,18 @@ export default class DialogApi {
   }
 
   // 方式二：创建实例方式
-  constructor(ContentWrapper, options) {
-    const {
-      lifecycle,
-      router,
-      store,
-      props,
-      on,
-      setting = { nomask: false, animateName: 'middle', position: 'middle' },
-    } = options;
+  constructor(
+    ContentWrapper,
+    { lifecycle, router, store, props, on, setting } = {
+      setting: { nomask: false, animateName: 'middle', position: 'middle' },
+    }
+  ) {
     const contentOption = lifecycle
       ? Object.assign(
-        ContentWrapper,
+          ContentWrapper,
           { mixins: [lifecycle] },
           { router, store }
-      )
+        )
       : Object.assign(ContentWrapper, { router, store });
     const contentConstructor = Vue.extend(contentOption);
     this.Instance = new contentConstructor({
