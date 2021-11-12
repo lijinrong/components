@@ -28,10 +28,10 @@ export default class DialogApi {
   ) {
     const options = lifecycle
       ? Object.assign(
-          ContentWrapper,
+        ContentWrapper,
           { mixins: [lifecycle] },
           { router, store }
-        )
+      )
       : Object.assign(ContentWrapper, { router, store });
     const Constructor = Vue.extend(options);
     const Instance = new Constructor({
@@ -85,10 +85,10 @@ export default class DialogApi {
   ) {
     const contentOption = lifecycle
       ? Object.assign(
-          ContentWrapper,
+        ContentWrapper,
           { mixins: [lifecycle] },
           { router, store }
-        )
+      )
       : Object.assign(ContentWrapper, { router, store });
     const contentConstructor = Vue.extend(contentOption);
     this.Instance = new contentConstructor({

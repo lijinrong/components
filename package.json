@@ -8,7 +8,7 @@
     "build:lib": "vue-cli-service build --lib",
     "test:unit": "vue-cli-service test:unit"
   },
-	"main": "./lib//ik-comp.js",
+  "main": "./lib//ik-comp.js",
   "dependencies": {
     "core-js": "^3.6.5",
     "vue": "^2.6.11"

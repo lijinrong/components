@@ -42,7 +42,10 @@ function resolveLibConfig(config) {
   config.entry('ik-comp').add(entryWithAll).end();
 
   // 打包lib
-  config.output.library('ik-comp').libraryTarget('umd').filename('[name]/index.js');
+  config.output
+    .library('ik-comp')
+    .libraryTarget('umd')
+    .filename('[name]/index.js');
   //不拆分公共代码
   config.optimization.splitChunks(false);
   // 单独提取css配置
@@ -58,6 +61,18 @@ function resolveLibConfig(config) {
     .delete('html')
     .delete('preload')
     .delete('prefetch');
+
+  // 图片全部转base64
+  config.module
+    .rule('images')
+    .use('url-loader')
+    .tap(args => {
+      console.log(args);
+      return {
+        ...args[0],
+        limit: undefined,
+      };
+    });
 }
 
 module.exports = {
