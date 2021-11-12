@@ -29,7 +29,7 @@ function resolveLibConfig(config) {
   arr.forEach(item => {
     const fullPath = path.join(dir, item);
     let entryPath = path.join(fullPath, 'index.js');
-    if(!fs.existsSync(entryPath)) {
+    if (!fs.existsSync(entryPath)) {
       entryPath = path.join(fullPath, 'index.vue');
     }
 
@@ -58,6 +58,11 @@ function resolveLibConfig(config) {
       chunkFilename: '[name]/style.css',
     },
   ]);
+
+  config.externals({
+    vue: 'Vue',
+  });
+
   // 不需拷贝html文件
   config.plugins
     .delete('copy')
@@ -69,13 +74,10 @@ function resolveLibConfig(config) {
   config.module
     .rule('images')
     .use('url-loader')
-    .tap(args => {
-      console.log(args);
-      return {
+    .tap(args => ({
         ...args[0],
         limit: undefined,
-      };
-    });
+      }));
 }
 
 module.exports = {

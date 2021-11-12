@@ -1,4 +1,3 @@
-import Vue from 'vue';
 // 蒙层组件
 import DialogWrapper from './index.vue';
 
@@ -19,6 +18,11 @@ import DialogWrapper from './index.vue';
 export default class DialogApi {
   Instance = null;
   _DialogInstance = null;
+  Vue = null;
+  static install(Vue) {
+    this.Vue = Vue;
+    Vue.prototype.$dialog = this;
+  }
   // 方式一：静态方法，直接调用DialogApi.show()方式使用
   static show(
     ContentWrapper,
@@ -33,12 +37,12 @@ export default class DialogApi {
           { router, store }
       )
       : Object.assign(ContentWrapper, { router, store });
-    const Constructor = Vue.extend(options);
+    const Constructor = this.Vue.extend(options);
     const Instance = new Constructor({
       propsData: props,
     });
 
-    const DialogC = Vue.extend(DialogWrapper);
+    const DialogC = this.Vue.extend(DialogWrapper);
     const DialogInstance = new DialogC({
       propsData: {
         ...setting,
@@ -68,7 +72,7 @@ export default class DialogApi {
     }
 
     const { $el } = DialogInstance.$mount();
-    Vue.nextTick(() => {
+    this.Vue.nextTick(() => {
       Instance.$mount();
       DialogInstance.$refs.content.append(Instance.$el);
       document.body.append($el);
@@ -90,11 +94,11 @@ export default class DialogApi {
           { router, store }
       )
       : Object.assign(ContentWrapper, { router, store });
-    const contentConstructor = Vue.extend(contentOption);
+    const contentConstructor = this.Vue.extend(contentOption);
     this.Instance = new contentConstructor({
       propsData: props,
     });
-    const DialogC = Vue.extend(DialogWrapper);
+    const DialogC = this.Vue.extend(DialogWrapper);
     this._DialogInstance = new DialogC({
       propsData: {
         ...setting,
@@ -121,9 +125,9 @@ export default class DialogApi {
   }
   show() {
     this._DialogInstance.$mount();
-    Vue.nextTick(() => {
+    this.Vue.nextTick(() => {
       this.Instance.$mount();
-      this._DialogInstance.$refs.content.append(Instance.$el);
+      this._DialogInstance.$refs.content.append(this.Instance.$el);
       document.body.append(this._DialogInstance.$el);
     });
   }
