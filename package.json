@@ -1,11 +1,12 @@
 {
   "name": "ik-components",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "private": false,
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build --lib",
-    "test:unit": "vue-cli-service test:unit"
+    "test:unit": "vue-cli-service test:unit",
+    "pub": "npm run build && npm publish"
   },
   "main": "./lib//ik-comp.js",
   "dependencies": {
