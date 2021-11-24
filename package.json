@@ -6,7 +6,7 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build --lib",
     "test:unit": "vue-cli-service test:unit",
-    "pub": "npm run build && npm version patch -m '升级版本号' && git push && npm publish"
+    "pub": "npm run build && npm version patch -m '升级版本号：%s' && git push && npm publish"
   },
   "main": "./lib/ik-comp.js",
   "dependencies": {
