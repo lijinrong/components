@@ -20,11 +20,11 @@ export default {
   props: {
     position: {
       type: String,
-      default: "middle",
+      default: 'middle',
     },
     animateName: {
       type: String,
-      default: "middle",
+      default: 'middle',
     },
     nomask: {
       type: Boolean,
@@ -43,20 +43,20 @@ export default {
   computed: {
     positionStyle() {
       const result = {
-        justifyContent: "center",
-        alignItems: "center",
+        justifyContent: 'center',
+        alignItems: 'center',
       };
-      if (this.position.includes("left")) {
-        result.alignItems = "flex-start";
+      if (this.position.includes('left')) {
+        result.alignItems = 'flex-start';
       }
-      if (this.position.includes("right")) {
-        result.alignItems = "flex-end";
+      if (this.position.includes('right')) {
+        result.alignItems = 'flex-end';
       }
-      if (this.position.includes("top")) {
-        result.justifyContent = "flex-start";
+      if (this.position.includes('top')) {
+        result.justifyContent = 'flex-start';
       }
-      if (this.position.includes("bottom")) {
-        result.justifyContent = "flex-end";
+      if (this.position.includes('bottom')) {
+        result.justifyContent = 'flex-end';
       }
       return result;
     },
@@ -86,5 +86,5 @@ export default {
 </script>
 
 <style lang="less" scoped>
-@import "./index.less";
+@import './index.less';
 </style>
