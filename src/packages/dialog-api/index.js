@@ -1,6 +1,62 @@
+import Vue from 'vue';
 // 蒙层组件
 import DialogWrapper from './index.vue';
 
+function createInstance(
+  ContentWrapper,
+  { lifecycle, router, store, props, on, setting } = {
+    setting: { nomask: false, animateName: 'middle', position: 'middle' },
+  }
+) {
+  const options = lifecycle
+    ? Object.assign(ContentWrapper, { mixins: [lifecycle] }, { router, store })
+    : Object.assign(ContentWrapper, { router, store });
+  const Constructor = Vue.extend(options);
+  const Instance = new Constructor({
+    propsData: props,
+  });
+
+  const DialogC = Vue.extend(DialogWrapper);
+  const DialogInstance = new DialogC({
+    propsData: {
+      ...setting,
+    },
+  });
+
+  // 绑定关闭方法，组件内可以调用this.$close()方法关闭自己
+  function close() {
+    this.$el.remove();
+    this.$destroy();
+  }
+  function contentClose() {
+    this.onClose();
+  }
+  // 点击弹窗内容中的关闭调用蒙层组件中的onClose()，执行离开动效进而再销毁实例
+  Instance.$close = contentClose.bind(DialogInstance);
+  // 点击蒙层调用close方法销毁实例
+  DialogInstance.$close = close.bind(DialogInstance);
+
+  // 绑定自定义事件
+  if (on) {
+    for (const key in on) {
+      typeof on[key] === 'function' && Instance.$on(key, on[key]);
+    }
+  }
+
+  return {
+    Instance,
+    DialogInstance,
+  };
+}
+
+function mount(Instance, DialogInstance) {
+  const { $el } = DialogInstance.$mount();
+  Vue.nextTick(() => {
+    Instance.$mount();
+    DialogInstance.$refs.content.append(Instance.$el);
+    document.body.append($el);
+  });
+}
 /**
  *
  * @param {弹窗内容组件} ContentWrapper
@@ -18,118 +74,32 @@ import DialogWrapper from './index.vue';
 export default class DialogApi {
   Instance = null;
   _DialogInstance = null;
-  Vue = null;
   static install(Vue) {
-    this.Vue = Vue;
+    DialogApi.prototype.Vue = Vue;
     Vue.prototype.$dialog = this;
   }
   // 方式一：静态方法，直接调用DialogApi.show()方式使用
-  static show(
-    ContentWrapper,
-    { lifecycle, router, store, props, on, setting } = {
-      setting: { nomask: false, animateName: 'middle', position: 'middle' },
-    }
-  ) {
-    const options = lifecycle
-      ? Object.assign(
-        ContentWrapper,
-          { mixins: [lifecycle] },
-          { router, store }
-      )
-      : Object.assign(ContentWrapper, { router, store });
-    const Constructor = this.Vue.extend(options);
-    const Instance = new Constructor({
-      propsData: props,
-    });
+  static show(ContentWrapper, options) {
+    const { Instance, DialogInstance } = createInstance(
+      ContentWrapper,
+      options
+    );
 
-    const DialogC = this.Vue.extend(DialogWrapper);
-    const DialogInstance = new DialogC({
-      propsData: {
-        ...setting,
-      },
-    });
-
-    // 绑定关闭方法，组件内可以调用this.$close()方法关闭自己
-    function close() {
-      //console.log('close');
-      this.$el.remove();
-      this.$destroy();
-    }
-    function contentClose() {
-      //console.log('contentClose');
-      this.onClose();
-    }
-    // 点击弹窗内容中的关闭调用蒙层组件中的onClose()，执行离开动效进而再销毁实例
-    Instance.$close = contentClose.bind(DialogInstance);
-    // 点击蒙层调用close方法销毁实例
-    DialogInstance.$close = close.bind(DialogInstance);
-
-    // 绑定自定义事件
-    if (on) {
-      for (const key in on) {
-        typeof on[key] === 'function' && Instance.$on(key, on[key]);
-      }
-    }
-
-    const { $el } = DialogInstance.$mount();
-    this.Vue.nextTick(() => {
-      Instance.$mount();
-      DialogInstance.$refs.content.append(Instance.$el);
-      document.body.append($el);
-    });
+    mount(Instance, DialogInstance);
     return Instance;
   }
 
   // 方式二：创建实例方式
-  constructor(
-    ContentWrapper,
-    { lifecycle, router, store, props, on, setting } = {
-      setting: { nomask: false, animateName: 'middle', position: 'middle' },
-    }
-  ) {
-    const contentOption = lifecycle
-      ? Object.assign(
-        ContentWrapper,
-          { mixins: [lifecycle] },
-          { router, store }
-      )
-      : Object.assign(ContentWrapper, { router, store });
-    const contentConstructor = this.Vue.extend(contentOption);
-    this.Instance = new contentConstructor({
-      propsData: props,
-    });
-    const DialogC = this.Vue.extend(DialogWrapper);
-    this._DialogInstance = new DialogC({
-      propsData: {
-        ...setting,
-      },
-    });
-    // 绑定关闭方法，组件内可以调用this.$close()方法关闭自己
-    function close() {
-      this.$el.remove();
-      this.$destroy();
-    }
-    function contentClose() {
-      this.onClose();
-    }
-    // 点击弹窗内容中的关闭调用蒙层组件中的onClose()，执行离开动效进而再销毁实例
-    this.Instance.$close = contentClose.bind(this._DialogInstance);
-    // 点击蒙层调用close方法销毁实例
-    this._DialogInstance.$close = close.bind(this._DialogInstance);
-
-    if (on) {
-      for (const key in on) {
-        typeof on[key] === 'function' && this.Instance.$on(key, on[key]);
-      }
-    }
+  constructor(ContentWrapper, options) {
+    const { Instance, DialogInstance } = createInstance(
+      ContentWrapper,
+      options
+    );
+    this.Instance = Instance;
+    this._DialogInstance = DialogInstance;
   }
   show() {
-    this._DialogInstance.$mount();
-    this.Vue.nextTick(() => {
-      this.Instance.$mount();
-      this._DialogInstance.$refs.content.append(this.Instance.$el);
-      document.body.append(this._DialogInstance.$el);
-    });
+    mount(this.Instance, this._DialogInstance);
   }
   close() {
     this._DialogInstance.onClose();

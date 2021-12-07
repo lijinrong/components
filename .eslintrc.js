@@ -1,3 +1,3 @@
 module.exports = {
-  extends: ['ik-gz', 'ik-gz/vue'],
+  extends: ["ik-gz", "ik-gz/vue"],
 };
