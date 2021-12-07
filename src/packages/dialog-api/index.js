@@ -1,4 +1,3 @@
-import Vue from 'vue';
 // 蒙层组件
 import DialogWrapper from './index.vue';
 
@@ -11,12 +10,12 @@ function createInstance(
   const options = lifecycle
     ? Object.assign(ContentWrapper, { mixins: [lifecycle] }, { router, store })
     : Object.assign(ContentWrapper, { router, store });
-  const Constructor = Vue.extend(options);
+  const Constructor = this.Vue.extend(options);
   const Instance = new Constructor({
     propsData: props,
   });
 
-  const DialogC = Vue.extend(DialogWrapper);
+  const DialogC = this.Vue.extend(DialogWrapper);
   const DialogInstance = new DialogC({
     propsData: {
       ...setting,
@@ -51,7 +50,7 @@ function createInstance(
 
 function mount(Instance, DialogInstance) {
   const { $el } = DialogInstance.$mount();
-  Vue.nextTick(() => {
+  this.Vue.nextTick(() => {
     Instance.$mount();
     DialogInstance.$refs.content.append(Instance.$el);
     document.body.append($el);
@@ -83,9 +82,9 @@ export default class DialogApi {
     const { Instance, DialogInstance } = createInstance(
       ContentWrapper,
       options
-    );
+    ).bind(DialogApi);
 
-    mount(Instance, DialogInstance);
+    mount(Instance, DialogInstance).bind(DialogApi);
     return Instance;
   }
 
@@ -94,12 +93,12 @@ export default class DialogApi {
     const { Instance, DialogInstance } = createInstance(
       ContentWrapper,
       options
-    );
+    ).bind(this);
     this.Instance = Instance;
     this._DialogInstance = DialogInstance;
   }
   show() {
-    mount(this.Instance, this._DialogInstance);
+    mount(this.Instance, this._DialogInstance).bind(this);
   }
   close() {
     this._DialogInstance.onClose();
