@@ -1,5 +1,6 @@
 // 蒙层组件
 import DialogWrapper from './index.vue';
+let Vue;
 
 function createInstance(
   ContentWrapper,
@@ -10,12 +11,12 @@ function createInstance(
   const options = lifecycle
     ? Object.assign(ContentWrapper, { mixins: [lifecycle] }, { router, store })
     : Object.assign(ContentWrapper, { router, store });
-  const Constructor = this.Vue.extend(options);
+  const Constructor = Vue.extend(options);
   const Instance = new Constructor({
     propsData: props,
   });
 
-  const DialogC = this.Vue.extend(DialogWrapper);
+  const DialogC = Vue.extend(DialogWrapper);
   const DialogInstance = new DialogC({
     propsData: {
       ...setting,
@@ -50,7 +51,7 @@ function createInstance(
 
 function mount(Instance, DialogInstance) {
   const { $el } = DialogInstance.$mount();
-  this.Vue.nextTick(() => {
+  Vue.nextTick(() => {
     Instance.$mount();
     DialogInstance.$refs.content.append(Instance.$el);
     document.body.append($el);
@@ -73,8 +74,8 @@ function mount(Instance, DialogInstance) {
 export default class DialogApi {
   Instance = null;
   _DialogInstance = null;
-  static install(Vue) {
-    DialogApi.prototype.Vue = Vue;
+  static install(_Vue) {
+    Vue = _Vue;
     Vue.prototype.$dialog = this;
   }
   // 方式一：静态方法，直接调用DialogApi.show()方式使用
@@ -82,9 +83,9 @@ export default class DialogApi {
     const { Instance, DialogInstance } = createInstance(
       ContentWrapper,
       options
-    ).bind(DialogApi);
+    );
 
-    mount(Instance, DialogInstance).bind(DialogApi);
+    mount(Instance, DialogInstance);
     return Instance;
   }
 
@@ -93,12 +94,12 @@ export default class DialogApi {
     const { Instance, DialogInstance } = createInstance(
       ContentWrapper,
       options
-    ).bind(this);
+    );
     this.Instance = Instance;
     this._DialogInstance = DialogInstance;
   }
   show() {
-    mount(this.Instance, this._DialogInstance).bind(this);
+    mount(this.Instance, this._DialogInstance);
   }
   close() {
     this._DialogInstance.onClose();
