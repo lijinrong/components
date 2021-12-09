@@ -5,19 +5,26 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build --lib",
+    "docs:dev": "vuepress dev docs",
+    "docs:build": "vuepress build docs",
     "test:unit": "vue-cli-service test:unit",
     "pub": "npm run build && npm version patch -m '升级版本号：%s' && git push && npm publish"
   },
   "main": "./lib/ik-comp.js",
   "dependencies": {
     "core-js": "^3.6.5",
-    "vue": "^2.6.11"
+    "vue": "^2.6.11",
+    "vuepress": "^1.8.2"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
     "@vue/cli-plugin-unit-mocha": "~4.5.0",
     "@vue/cli-service": "~4.5.0",
     "@vue/test-utils": "^1.0.3",
+    "@vuepress/plugin-active-header-links": "^1.8.2",
+    "@vuepress/plugin-back-to-top": "^1.8.2",
+    "@vuepress/plugin-nprogress": "^1.8.2",
+    "@vuepress/plugin-register-components": "^1.8.2",
     "chai": "^4.1.2",
     "eslint-config-ik-gz": "git+ssh://git@code.inke.cn:gz/web/opd/eslint-config-ik-gz.git",
     "less": "^4.1.2",
