@@ -51,10 +51,13 @@ function createInstance(
 
 function mount(Instance, DialogInstance) {
   const { $el } = DialogInstance.$mount();
+  document.body.append($el);
+
   Vue.nextTick(() => {
-    Instance.$mount();
-    DialogInstance.$refs.content.append(Instance.$el);
-    document.body.append($el);
+    // 先创建dom，再mounted，避免mounted时获取不到祖先dom
+    const temp = document.createElement('div');
+    DialogInstance.$refs.content.append(temp);
+    Instance.$mount(temp);
   });
 }
 /**
