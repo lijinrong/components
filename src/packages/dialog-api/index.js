@@ -1,6 +1,8 @@
 // 蒙层组件
 import DialogWrapper from './index.vue';
 let Vue;
+// 统一管理打开的所有弹窗
+const Instances = [];
 
 function createInstance(
   ContentWrapper,
@@ -8,19 +10,21 @@ function createInstance(
     setting: { nomask: false, animateName: 'middle', position: 'middle' },
   }
 ) {
+  const DialogC = Vue.extend(DialogWrapper);
+  const DialogInstance = new DialogC({
+    propsData: {
+      ...setting,
+    },
+    parent: DialogApi.root,
+  });
+
   const options = lifecycle
     ? Object.assign(ContentWrapper, { mixins: [lifecycle] }, { router, store })
     : Object.assign(ContentWrapper, { router, store });
   const Constructor = Vue.extend(options);
   const Instance = new Constructor({
     propsData: props,
-  });
-
-  const DialogC = Vue.extend(DialogWrapper);
-  const DialogInstance = new DialogC({
-    propsData: {
-      ...setting,
-    },
+    parent: DialogInstance,
   });
 
   // 绑定关闭方法，组件内可以调用this.$close()方法关闭自己
@@ -77,9 +81,26 @@ function mount(Instance, DialogInstance) {
 export default class DialogApi {
   Instance = null;
   _DialogInstance = null;
+  static root = null;
   static install(_Vue) {
     Vue = _Vue;
     Vue.prototype.$dialog = this;
+    Vue.mixin({
+      watch: {
+        $route() {
+          // 路由变化，关闭所有弹窗
+          while (Instances.length) {
+            const Instance = Instances.pop();
+            Instance.$close();
+          }
+        },
+      },
+      beforeCreate() {
+        if (!DialogApi.root) {
+          DialogApi.root = this.$root;
+        }
+      },
+    });
   }
   // 方式一：静态方法，直接调用DialogApi.show()方式使用
   static show(ContentWrapper, options) {
@@ -88,6 +109,7 @@ export default class DialogApi {
       options
     );
 
+    Instances.push(Instance);
     mount(Instance, DialogInstance);
     return Instance;
   }
@@ -99,6 +121,7 @@ export default class DialogApi {
       options
     );
     this.Instance = Instance;
+    Instances.push(Instance);
     this._DialogInstance = DialogInstance;
   }
   show() {
