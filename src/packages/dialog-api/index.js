@@ -6,7 +6,7 @@ const Instances = [];
 
 function createInstance(
   ContentWrapper,
-  { lifecycle, router, store, props, on, setting } = {
+  { lifecycle, props, on, setting } = {
     setting: { nomask: false, animateName: 'middle', position: 'middle' },
   }
 ) {
@@ -19,8 +19,8 @@ function createInstance(
   });
 
   const options = lifecycle
-    ? Object.assign(ContentWrapper, { mixins: [lifecycle] }, { router, store })
-    : Object.assign(ContentWrapper, { router, store });
+    ? Object.assign(ContentWrapper, { mixins: [lifecycle] })
+    : Object.assign(ContentWrapper);
   const Constructor = Vue.extend(options);
   const Instance = new Constructor({
     propsData: props,
