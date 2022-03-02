@@ -29,7 +29,10 @@ function createInstance(
 
   // 绑定关闭方法，组件内可以调用this.$close()方法关闭自己
   function close() {
+    Instance.$el.remove();
     this.$el.remove();
+
+    Instance.$destroy();
     this.$destroy();
   }
   function contentClose() {
