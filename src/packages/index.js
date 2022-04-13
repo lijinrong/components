@@ -2,13 +2,11 @@ import Dialog from './dialog-api/index.js';
 import Avatar from './avatar/index.js';
 
 // 组件列表
-const components = [
-  Avatar,
-];
+const components = [Avatar];
 
 // 全局注册组件
-const install = Vue => {
-  components.forEach(comp => {
+const install = (Vue) => {
+  components.forEach((comp) => {
     Vue.components(comp.name, comp);
   });
 };
@@ -23,5 +21,5 @@ if (typeof Window.Vue !== 'undefined') {
 export default {
   install,
   dialogApi: Dialog,
-	Avatar,
+  Avatar,
 };

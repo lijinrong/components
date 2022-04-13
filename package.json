@@ -10,7 +10,7 @@
     "test:unit": "vue-cli-service test:unit",
     "pub": "npm run build && npm version patch -m '升级版本号：%s' && git push && npm publish"
   },
-  "main": "./lib/ik-comp.js",
+  "main": "./lib/ik-comp/index.js",
   "dependencies": {
     "core-js": "^3.6.5",
     "vue": "^2.6.11",
