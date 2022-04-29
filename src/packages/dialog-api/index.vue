@@ -1,7 +1,12 @@
 <template>
   <div class="dialog" :style="positionStyle">
     <transition name="fade">
-      <div class="mask" v-if="!nomask && show" @click.self="onMaskClose"></div>
+      <div
+        class="mask"
+        @touchmove.prevent
+        v-if="!nomask && show"
+        @click.self="onMaskClose"
+      ></div>
     </transition>
     <transition :name="animateName" @after-leave="afterLeave">
       <div class="scroll-area" v-if="show" ref="content"></div>
@@ -16,6 +21,25 @@
  * animateName[可选]:动画名，值可为'middle' || 'top' || 'right' || 'bottom' || 'left'
  * nomask[可选]:是否有蒙层，true:不显示蒙层，false:显示蒙层
  */
+function getScrollParent(el, root) {
+  let node = el;
+
+  while (node && node !== root) {
+    if (node === document.body) {
+      return root;
+    }
+
+    const { overflowY } = window.getComputedStyle(node);
+
+    if (['scroll', 'auto', 'overlay'].includes(overflowY)) {
+      return node;
+    }
+
+    node = node.parentNode;
+  }
+
+  return root;
+}
 export default {
   props: {
     position: {
@@ -33,6 +57,10 @@ export default {
     disableMaskClose: {
       type: Boolean,
       default: false,
+    },
+    disableBodyScroll: {
+      type: Boolean,
+      default: true,
     },
   },
   data() {
@@ -63,6 +91,11 @@ export default {
   },
   mounted() {
     this.show = true;
+    if (this.disableBodyScroll) {
+      this.$nextTick(() => {
+        this.fuckScrollChaining();
+      });
+    }
   },
   methods: {
     onMaskClose() {
@@ -72,6 +105,9 @@ export default {
       this.onClose();
     },
     onClose() {
+      if (this.disableBodyScroll) {
+        document.body.classList.remove('modal--open');
+      }
       // 点击蒙层，开始执行离开动效
       this.show = false;
     },
@@ -81,9 +117,46 @@ export default {
       // console.log(this.show);
       this.$close();
     },
+    // 解决弹窗滚动穿透问题
+    fuckScrollChaining() {
+      document.body.classList.add('modal--open');
+      const listenerOpts = { passive: false };
+      const $modal = this.$refs.content;
+      let startY = 0;
+
+      $modal.addEventListener('touchstart', (e) => {
+        startY = e.touches[0].pageY;
+      });
+      $modal.addEventListener(
+        'touchmove',
+        (e) => {
+          const el = getScrollParent(e.target, this.$el);
+          if (!el) {
+            return;
+          }
+
+          const endY = e.touches[0].pageY;
+          const delta = endY - startY;
+          const { scrollHeight, offsetHeight, scrollTop } = el;
+          if (
+            (scrollTop === 0 && delta > 0) ||
+            (scrollTop + offsetHeight >= scrollHeight && delta < 0)
+          ) {
+            e.preventDefault();
+          }
+        },
+        listenerOpts
+      );
+    },
   },
 };
 </script>
+
+<style lang="less">
+.modal--open {
+  overflow: hidden;
+}
+</style>
 
 <style lang="less" scoped>
 @import './index.less';
