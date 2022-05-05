@@ -124,9 +124,13 @@ export default {
       const $modal = this.$refs.content;
       let startY = 0;
 
-      $modal.addEventListener('touchstart', (e) => {
-        startY = e.touches[0].pageY;
-      });
+      $modal.addEventListener(
+        'touchstart',
+        (e) => {
+          startY = e.touches[0].pageY;
+        },
+        { passive: true }
+      );
       $modal.addEventListener(
         'touchmove',
         (e) => {
