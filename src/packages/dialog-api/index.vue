@@ -142,7 +142,7 @@ export default {
             (scrollTop === 0 && delta > 0) ||
             (scrollTop + offsetHeight >= scrollHeight && delta < 0)
           ) {
-            e.preventDefault();
+            e.cancelable && e.preventDefault();
           }
         },
         listenerOpts
