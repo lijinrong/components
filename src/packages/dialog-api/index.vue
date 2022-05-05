@@ -30,8 +30,8 @@ function getScrollParent(el, root) {
     }
 
     const { overflowY } = window.getComputedStyle(node);
-
-    if (['scroll', 'auto', 'overlay'].includes(overflowY)) {
+    const canScroll = node.scrollHeight > node.clientHeight;
+    if (['scroll', 'auto', 'overlay'].includes(overflowY) && canScroll) {
       return node;
     }
 
