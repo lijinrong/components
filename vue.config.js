@@ -26,7 +26,7 @@ function resolveLibConfig(config) {
   const dir = path.join(__dirname, './src/packages');
   const entryWithAll = path.join(__dirname, './src/packages', 'index.js');
   const arr = fs.readdirSync(dir);
-  arr.forEach(item => {
+  arr.forEach((item) => {
     const fullPath = path.join(dir, item);
     let entryPath = path.join(fullPath, 'index.js');
     if (!fs.existsSync(entryPath)) {
@@ -60,7 +60,12 @@ function resolveLibConfig(config) {
   ]);
 
   config.externals({
-    vue: 'Vue',
+    vue: {
+      root: 'Vue',
+      commonjs: 'vue',
+      commonjs2: 'vue',
+      amd: 'vue',
+    },
   });
 
   // 不需拷贝html文件
@@ -74,15 +79,16 @@ function resolveLibConfig(config) {
   config.module
     .rule('images')
     .use('url-loader')
-    .tap(args => ({
-        ...args[0],
-        limit: undefined,
-      }));
+    .tap((args) => ({
+      ...args[0],
+      limit: undefined,
+    }));
 }
 
 module.exports = {
   outputDir: 'lib',
-  chainWebpack: config => {
+  publicPath: './',
+  chainWebpack: (config) => {
     // 打包lib
     if (
       process.env.npm_lifecycle_script &&
