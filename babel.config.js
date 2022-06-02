@@ -1,10 +1,12 @@
 module.exports = {
-  presets: ['@babel/preset-env'],
+  presets: ['@vant/cli/preset'],
   plugins: [
     [
-      '@babel/plugin-transform-runtime',
+      'import',
       {
-        corejs: { version: 2 },
+        libraryName: 'vant',
+        libraryDirectory: 'es',
+        style: true,
       },
     ],
   ],

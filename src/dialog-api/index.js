@@ -1,5 +1,6 @@
 // 蒙层组件
-import DialogWrapper from './index.vue';
+import DialogWrapper from './dialog.vue';
+
 let Vue;
 // 统一管理打开的所有弹窗
 const Instances = [];
@@ -45,9 +46,11 @@ function createInstance(
 
   // 绑定自定义事件
   if (on) {
-    for (const key in on) {
-      typeof on[key] === 'function' && Instance.$on(key, on[key]);
-    }
+    Object.keys(on).forEach((key) => {
+      if (typeof on[key] === 'function') {
+        Instance.$on(key, on[key]);
+      }
+    });
   }
 
   return {
@@ -83,8 +86,11 @@ function mount(Instance, DialogInstance) {
  */
 export default class DialogApi {
   Instance = null;
+
   _DialogInstance = null;
+
   static root = null;
+
   static install(_Vue) {
     Vue = _Vue;
     Vue.prototype.$dialog = this;
@@ -105,6 +111,7 @@ export default class DialogApi {
       },
     });
   }
+
   // 方式一：静态方法，直接调用DialogApi.show()方式使用
   static show(ContentWrapper, options) {
     const { Instance, DialogInstance } = createInstance(
@@ -127,9 +134,11 @@ export default class DialogApi {
     Instances.push(Instance);
     this._DialogInstance = DialogInstance;
   }
+
   show() {
     mount(this.Instance, this._DialogInstance);
   }
+
   close() {
     this._DialogInstance.onClose();
   }

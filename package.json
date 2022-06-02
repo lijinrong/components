@@ -1,40 +1,63 @@
 {
   "name": "ik-components",
-  "version": "0.2.20",
-  "private": false,
+  "version": "1.0.0",
+  "description": "",
+  "main": "lib/ik-components.js",
+  "style": "lib/index.css",
+  "files": [
+    "lib",
+    "es"
+  ],
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build --lib",
-    "docs:dev": "vuepress dev docs",
-    "docs:build": "vuepress build docs",
-    "test:unit": "vue-cli-service test:unit",
-    "pub": "npm run build && npm version patch -m '升级版本号：%s' && git push && npm publish"
+    "dev": "vant-cli dev",
+    "test": "vant-cli test",
+    "lint": "vant-cli lint",
+    "build": "vant-cli build",
+    "release": "vant-cli release",
+    "test:coverage": "open test/coverage/index.html",
+    "build-site": "vant-cli build-site"
   },
-  "main": "./lib/ik-comp/index.js",
-  "dependencies": {
-    "core-js": "^3.6.5",
+  "author": "",
+  "license": "MIT",
+  "repository": "https://github.com/lijinrong/components",
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "commit-msg": "vant-cli commit-lint"
+    }
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx,vue}": "eslint --fix",
+    "*.{vue,css,less,scss}": "stylelint --fix"
+  },
+  "peerDependencies": {
     "vue": "^2.6.11",
-    "vuepress": "^1.8.2"
+    "vue-template-compiler": "^2.6.11"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "~4.5.0",
-    "@vue/cli-plugin-unit-mocha": "~4.5.0",
-    "@vue/cli-service": "~4.5.0",
-    "@vue/test-utils": "^1.0.3",
-    "@vuepress/plugin-active-header-links": "^1.8.2",
-    "@vuepress/plugin-back-to-top": "^1.8.2",
-    "@vuepress/plugin-nprogress": "^1.8.2",
-    "@vuepress/plugin-register-components": "^1.8.2",
-    "chai": "^4.1.2",
+    "@vant/cli": "^2.0.0",
+    "babel-plugin-import": "^1.13.5",
     "eslint-config-ik-gz": "git+ssh://git@code.inke.cn:gz/web/opd/eslint-config-ik-gz.git",
-    "less": "^4.1.2",
-    "less-loader": "^7.2.0",
-    "postcss-px2rem": "^0.3.0",
-    "sass": "^1.26.5",
-    "sass-loader": "^8.0.2",
-    "stylelint": "^14.0.1",
-    "stylelint-order": "^5.0.0",
-    "vue-template-compiler": "^2.6.11",
-    "webpack-bundle-analyzer": "^4.5.0"
-  }
+    "vant": "2",
+    "vue": "^2.6.11",
+    "vue-template-compiler": "^2.6.11"
+  },
+  "eslintConfig": {
+    "root": true,
+    "extends": [
+      "@vant"
+    ]
+  },
+  "stylelint": {
+    "extends": [
+      "@vant/stylelint-config"
+    ]
+  },
+  "prettier": {
+    "singleQuote": true
+  },
+  "browserslist": [
+    "Android >= 4.0",
+    "iOS >= 8"
+  ]
 }
