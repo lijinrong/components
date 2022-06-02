@@ -65,7 +65,7 @@ export default {
   },
   data() {
     return {
-      show: false, //用于控制动画
+      show: false, // 用于控制动画
     };
   },
   computed: {
@@ -111,7 +111,7 @@ export default {
       // 点击蒙层，开始执行离开动效
       this.show = false;
     },
-    afterLeave: function () {
+    afterLeave() {
       // 离开动画执行完才把实例销毁
       // console.log('afterleave');
       // console.log(this.show);
