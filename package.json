@@ -19,7 +19,7 @@
   },
   "author": "",
   "license": "MIT",
-  "repo": "https://github.com/lijinrong/components",
+  "repository": "https://github.com/lijinrong/components",
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged",
