@@ -21,6 +21,9 @@
   "author": "",
   "license": "MIT",
   "repository": "https://github.com/lijinrong/components",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org"
+  },
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged",
