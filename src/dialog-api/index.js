@@ -1,7 +1,7 @@
 // 蒙层组件
 import DialogWrapper from './dialog.vue';
+import Vue from 'vue';
 
-let Vue;
 // 统一管理打开的所有弹窗
 const Instances = [];
 
@@ -91,8 +91,7 @@ export default class DialogApi {
 
   static root = null;
 
-  static install(_Vue) {
-    Vue = _Vue;
+  static install() {
     Vue.prototype.$dialog = this;
     Vue.mixin({
       watch: {

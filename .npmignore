@@ -1,0 +1,7 @@
+node_modules
+docs
+src
+.npmignore
+.eslintrc.js
+babel.config.js
+vant.config.js

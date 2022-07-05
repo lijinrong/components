@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "lib/ik-components.js",
+  "module": "es/index.js",
   "style": "lib/index.css",
   "files": [
     "lib",
