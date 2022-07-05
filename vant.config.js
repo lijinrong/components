@@ -10,7 +10,7 @@ module.exports = {
   },
   site: {
     title: 'ik-components',
-    logo: 'https://img.yzcdn.cn/vant/logo.png',
+    logo: 'http://media.xiangshengclub.com/MTY1NDE2NDgzOTcwMyM1NDgjaWNv.ico',
     nav: [
       {
         title: '开发指南',
