@@ -16,7 +16,7 @@ Vue.mixin({
     },
   },
   beforeCreate() {
-    if (!DialogApi.root) {
+    if (!DialogApi.root && this.$root && this.$root.$el) {
       DialogApi.root = this.$root;
     }
   },
