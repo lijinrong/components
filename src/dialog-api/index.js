@@ -5,6 +5,23 @@ import Vue from 'vue';
 // 统一管理打开的所有弹窗
 const Instances = [];
 
+Vue.mixin({
+  watch: {
+    $route() {
+      // 路由变化，关闭所有弹窗
+      while (Instances.length) {
+        const Instance = Instances.pop();
+        Instance.$close();
+      }
+    },
+  },
+  beforeCreate() {
+    if (!DialogApi.root) {
+      DialogApi.root = this.$root;
+    }
+  },
+});
+
 function createInstance(
   ContentWrapper,
   { lifecycle, props, on, setting } = {
@@ -93,22 +110,6 @@ export default class DialogApi {
 
   static install() {
     Vue.prototype.$dialog = this;
-    Vue.mixin({
-      watch: {
-        $route() {
-          // 路由变化，关闭所有弹窗
-          while (Instances.length) {
-            const Instance = Instances.pop();
-            Instance.$close();
-          }
-        },
-      },
-      beforeCreate() {
-        if (!DialogApi.root) {
-          DialogApi.root = this.$root;
-        }
-      },
-    });
   }
 
   // 方式一：静态方法，直接调用DialogApi.show()方式使用
