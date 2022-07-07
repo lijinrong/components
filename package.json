@@ -1,6 +1,6 @@
 {
   "name": "ik-components",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "",
   "main": "lib/ik-components.js",
   "module": "es/index.js",

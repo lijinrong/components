@@ -1,7 +1,7 @@
-### [v1.0.3](https://github.com/compare/v1.0.2...v1.0.3)
+### [v1.0.4](https://github.com/compare/v1.0.3...v1.0.4)
 
-`2022-07-05`
+`2022-07-07`
 
 **Feature**
 
-- update [582e80](https://github.com/commit/582e801dc7e42f7f32e475a9d9ff4476a6a3ae02)
+- 修复使用i18n时错误 [cb2f4c](https://github.com/commit/cb2f4c6da6e6d7a044601341c03e2f1c58959504)
