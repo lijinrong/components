@@ -1,5 +1,3 @@
-
-
 # dialog 弹窗
 
 ### 简介
@@ -26,17 +24,19 @@
 
 ## 代码演示
 
-### 函数式调用
+### 1、函数式调用
 
 ```js
-//方式一  关闭直接在内容组件弹窗中调用this.$close()
+// 方式一  关闭直接在内容组件弹窗中调用this.$close()
+// 最好告诉dialogApi当前的调用上下文，特别是使用vue-router 或vuex等组件时
+dialogAPI.show.bind(YourComponentInstance)(ContentWrapper, options);
 dialogAPI.show(ContentWrapper, options);
 ```
 
-### 创建实例方式
+### 2、创建实例方式
 
 ```js
-//方式二  关闭需要回传一个事件给父组件调用实例的close()或直接在内容组件弹窗中调用this.$close()
+// 方式二  关闭需要回传一个事件给父组件调用实例的close()或直接在内容组件弹窗中调用this.$close()
 const instance = new DialogApi(ContentWrapper, options);
 instance.show(); //展示
 instance.close(); //关闭
@@ -50,12 +50,13 @@ instance.close(); //关闭
 
 ### options
 
-|    参数     |    类型    |                           Default                            | 说明                                                         | 是否必传 |
-| :---------: | :--------: | :----------------------------------------------------------: | :----------------------------------------------------------- | :------- |
-| `lifecycle` | `{Object}` |                             `{}`                             | 弹窗内容组件的生命周期函数对象集，比如`{created()、mounted()}` | 否       |
-|   `props`   | `{Object}` |                             `{}`                             | 传给弹窗内容组件的属性,如`props:{isShow:true}`               | 否       |
-|    `on`     | `{Object}` |                             `{}`                             | 接收弹窗组件传给父组件的事件监听,如`on:{refreshPage(){},}`   | 否       |
-|  `setting`  | `{Object}` | `{ nomask: false, animateName: 'middle', position: 'middle' }` | 设置是否显示弹窗蒙层、弹窗内容组件的位置和动画效果           | 否       |
+|    参数     |      类型       |                            Default                             | 说明                                                               | 是否必传 |
+| :---------: | :-------------: | :------------------------------------------------------------: | :----------------------------------------------------------------- | :------- |
+| `lifecycle` |   `{Object}`    |                              `{}`                              | 弹窗内容组件的生命周期函数对象集，比如`{created()、mounted()}`     | 否       |
+|   `props`   |   `{Object}`    |                              `{}`                              | 传给弹窗内容组件的属性,如`props:{isShow:true}`                     | 否       |
+|    `on`     |   `{Object}`    |                              `{}`                              | 接收弹窗组件传给父组件的事件监听,如`on:{refreshPage(){},}`         | 否       |
+|  `setting`  |   `{Object}`    | `{ nomask: false, animateName: 'middle', position: 'middle' }` | 设置是否显示弹窗蒙层、弹窗内容组件的位置和动画效果                 | 否       |
+|  `context`  | `{VueInstance}` |                          `undefined`                           | 执行上下文，在使用`创建实例方式`且使用 `vue-router` 或`vuex`时必传 | 否       |
 
 ### on
 
@@ -91,8 +92,8 @@ instance.close(); //关闭
 
 ### setting
 
-|     Name      |    Type     | Default  | Description                                                  |
-| :-----------: | :---------: | :------: | :----------------------------------------------------------- |
-|  **nomask**   | `{Boolean}` | `false`  | 弹窗是否显示蒙层                                             |
-| `animateName` | `{String}`  | `middle` | 动效的名字<br />目前可以传的值为: <br />_middle：弹窗内容从中间弹出_ <br />_top：弹窗内容从顶部弹出_ <br />_right：弹窗内容从右边弹出_ <br />_bottom：弹窗内容从底部弹出_ <br />_left：弹窗内容从左边弹出_ |
+|     Name      |    Type     | Default  | Description                                                                                                                                                                                                                                                                                            |
+| :-----------: | :---------: | :------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+|  **nomask**   | `{Boolean}` | `false`  | 弹窗是否显示蒙层                                                                                                                                                                                                                                                                                       |
+| `animateName` | `{String}`  | `middle` | 动效的名字<br />目前可以传的值为: <br />_middle：弹窗内容从中间弹出_ <br />_top：弹窗内容从顶部弹出_ <br />_right：弹窗内容从右边弹出_ <br />_bottom：弹窗内容从底部弹出_ <br />_left：弹窗内容从左边弹出_                                                                                             |
 |  `position`   | `{String}`  | `middle` | 可以传包含方位名词的字符串，比如传'left zzz'弹窗内容会在页面的左边垂直居中。目前可以定位包含了(括号中是传的字符串包含的方位名词)：_左上角(top left)、顶部水平居中(top)、右上角(top right)、右边垂直居中(right)、右下角(bottom right)、底部水平居中(bottom)、左下角(left bottom)、左边垂直居中(left)_。 |

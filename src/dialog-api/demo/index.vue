@@ -55,12 +55,20 @@ export default {
   },
   methods: {
     show(animateName = 'middle') {
-      this.$dialog.show(DialogContent, {
+      // this.$dialog.show.bind(this)(DialogContent, {
+      //   setting: {
+      //     animateName,
+      //     position: this.position,
+      //   },
+      // });
+      const test = new this.$dialog(DialogContent, {
         setting: {
           animateName,
           position: this.position,
         },
+        context: this,
       });
+      test.show();
     },
   },
 };

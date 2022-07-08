@@ -106,6 +106,8 @@ export default class DialogApi {
 
   _DialogInstance = null;
 
+  context = null;
+
   static root = null;
 
   static install() {
@@ -114,22 +116,37 @@ export default class DialogApi {
 
   // 方式一：静态方法，直接调用DialogApi.show()方式使用
   static show(ContentWrapper, options) {
+    // 最好告诉我你的调用上下文 Dialog.show.bind(this)(Modal, param)
+    const root = DialogApi.root;
+    if (this !== DialogApi && this instanceof Vue) {
+      DialogApi.root = this;
+    }
+
     const { Instance, DialogInstance } = createInstance(
       ContentWrapper,
       options
     );
 
+    DialogApi.root = root;
+
     Instances.push(Instance);
     mount(Instance, DialogInstance);
+
     return Instance;
   }
 
   // 方式二：创建实例方式
   constructor(ContentWrapper, options) {
+    const root = DialogApi.root;
+    // 指定上下文
+    if (options.context) {
+      DialogApi.root = options.context;
+    }
     const { Instance, DialogInstance } = createInstance(
       ContentWrapper,
       options
     );
+    DialogApi.root = root;
     this.Instance = Instance;
     Instances.push(Instance);
     this._DialogInstance = DialogInstance;
