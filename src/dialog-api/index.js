@@ -47,11 +47,15 @@ function createInstance(
 
   // 绑定关闭方法，组件内可以调用this.$close()方法关闭自己
   function close() {
-    Instance.$el.remove();
-    this.$el.remove();
+    if (!this._DIALOG_API_INSTANCE) {
+      Instance.$el.remove();
+      this.$el.remove();
 
-    Instance.$destroy();
-    this.$destroy();
+      Instance.$destroy();
+      this.$destroy();
+    } else {
+      this.$el.remove();
+    }
   }
   function contentClose() {
     this.onClose();
@@ -77,15 +81,19 @@ function createInstance(
 }
 
 function mount(Instance, DialogInstance) {
-  const { $el } = DialogInstance.$mount();
-  document.body.append($el);
+  if (!DialogInstance._isMounted) {
+    DialogInstance.$mount();
 
-  Vue.nextTick(() => {
-    // 先创建dom，再mounted，避免mounted时获取不到祖先dom
-    const temp = document.createElement('div');
-    DialogInstance.$refs.content.append(temp);
-    Instance.$mount(temp);
-  });
+    Vue.nextTick(() => {
+      // 先创建dom，再mounted，避免mounted时获取不到祖先dom
+      const temp = document.createElement('div');
+      DialogInstance.$refs.content.append(temp);
+      Instance.$mount(temp);
+    });
+  }
+
+  DialogInstance.show = true;
+  document.body.append(DialogInstance.$el);
 }
 /**
  *
@@ -115,7 +123,7 @@ export default class DialogApi {
   }
 
   // 方式一：静态方法，直接调用DialogApi.show()方式使用
-  static show(ContentWrapper, options) {
+  static show(ContentWrapper, options = {}) {
     // 最好告诉我你的调用上下文 Dialog.show.bind(this)(Modal, param)
     const root = DialogApi.root;
     if (this !== DialogApi && this instanceof Vue) {
@@ -136,7 +144,7 @@ export default class DialogApi {
   }
 
   // 方式二：创建实例方式
-  constructor(ContentWrapper, options) {
+  constructor(ContentWrapper, options = {}) {
     const root = DialogApi.root;
     // 指定上下文
     if (options.context) {
@@ -146,6 +154,7 @@ export default class DialogApi {
       ContentWrapper,
       options
     );
+    DialogInstance._DIALOG_API_INSTANCE = true;
     DialogApi.root = root;
     this.Instance = Instance;
     Instances.push(Instance);
@@ -158,5 +167,12 @@ export default class DialogApi {
 
   close() {
     this._DialogInstance.onClose();
+  }
+
+  destroy() {
+    this.Instance.$destroy();
+    this._DialogInstance.$destroy();
+    this.Instance.$el.remove();
+    this._DialogInstance.$el.remove();
   }
 }

@@ -9,7 +9,7 @@
       ></div>
     </transition>
     <transition :name="animateName" @after-leave="afterLeave">
-      <div class="scroll-area" v-if="show" ref="content"></div>
+      <div class="scroll-area" v-show="show" ref="content"></div>
     </transition>
     <div v-if="animateName === 'bottom'" class="safe-distance"></div>
   </div>
